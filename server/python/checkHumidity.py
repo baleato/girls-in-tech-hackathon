@@ -23,17 +23,10 @@ try:
     if not ser.isOpen():
         ser.open()
 
-    while True:
-        print get_humidity(ser)
-        time.sleep(1)
+    print get_humidity(ser)
 
-
-    temperature = get_temperature(ser)
-    humidity = get_humidity(ser)
-    air_quality = get_air_quality(ser)
-    timestamp = get_timestamp()
-    value = str(timestamp) + " " + str(humidity) + " " + str(temperature) + " " + str(air_quality) + "\n"
-    write_to_file("Sensordata.txt",value)
+    ser.flush()
+    ser.close()
 
 except:
     ser.flush()

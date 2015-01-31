@@ -21,9 +21,9 @@ def turnOn():
     send_packet_param(ser, 0x06, 0x0003, [0x05, 0x02, 20, 1])
     read_packet(ser)
 
-    for i in reversed(range(60)):
-        print "3 of 5) Wakeup curve 19, 1 minute(s), ", i
-        time.sleep(1)
+#    for i in reversed(range(60)):
+#        print "3 of 5) Wakeup curve 19, 1 minute(s), ", i
+#        time.sleep(1)
 
     return
 

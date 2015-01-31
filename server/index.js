@@ -56,24 +56,50 @@ app.route('/alarm')
 
 var bridge = require('./bridge');
 // Sorry for all this intervals... hackathon time
+var checking = false;
 setInterval(
   function(){
+    if(checking) return;
+
+    checking = true;
     bridge.check(function(value){
       shouldGetUpEarly = value;
+      checking = false;
+    }, function(){
+      checking = false;
     });
   }, 5000);
 
-var switchingOn = false;
+var switchingOn = false,
+  isLigthOn = false;
 setInterval(
   function(){
+    console.log("alarm: ", new Date(getRealAlarmTimeMs()));
     if(getRealAlarmTimeMs() <= Date.now()){
       if(!switchingOn){
-        bridge.turnLampOn();
         switchingOn = true;
+        bridge.turnLampOn(
+          function(){
+            ;
+          },
+          function(){
+            switchingOn = false;
+          });
       }
     }else{
-      bridge.turnLampOff();
-      switchingOn = false;
+      if(isLigthOn) {
+        bridge.turnLampOff(
+          // success
+          function(){
+            switchingOn = false;
+            isLigthOn = false;
+
+          },
+          // error
+          function(){
+
+          });
+      }
     }
   }, 5000);
 

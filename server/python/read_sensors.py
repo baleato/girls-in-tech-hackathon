@@ -28,7 +28,11 @@ try:
 	timestamp = get_timestamp()
 	value = str(timestamp) + " " + str(humidity) + " " + str(temperature) + " " + str(air_quality) + "\n"
 	write_to_file("Sensordata.txt",value)
+	print value
 
+
+	ser.flush()
+	ser.close()
 except:
 	ser.flush()
 	ser.close()
