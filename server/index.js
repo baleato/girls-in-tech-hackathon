@@ -40,64 +40,67 @@ function update(req, res){
 
 app.route('/alarm')
   .get(function(req, res) {
-    console.log('[GET] alarm');
+    // console.log('[GET] alarm');
     res.send({
       alarm: getRealAlarmTimeMs()
     });
   })
   .post(function(req, res) {
-    console.log('[POST] alarm', res.body);
+    console.log('[POST] alarm', req.body);
     update(req, res);
   })
   .put(function(req, res) {
-    console.log('[PUT] alarm', res.body);
+    console.log('[PUT] alarm', req.body);
     update(req, res);
   });
 
 var bridge = require('./bridge');
 // Sorry for all this intervals... hackathon time
 var checking = false;
-setInterval(
-  function(){
+
+(function checkHumidity(){
     if(checking) return;
 
     checking = true;
     bridge.check(function(value){
       shouldGetUpEarly = value;
       checking = false;
+      setTimeout(checkHumidity, 1000);
     }, function(){
       checking = false;
+      setTimeout(checkHumidity, 1000);
     });
-  }, 5000);
+})();
 
 var switchingOn = false,
-  isLigthOn = false;
+  isLigthOn;
 setInterval(
   function(){
-    console.log("alarm: ", new Date(getRealAlarmTimeMs()));
     if(getRealAlarmTimeMs() <= Date.now()){
       if(!switchingOn){
         switchingOn = true;
         bridge.turnLampOn(
           function(){
-            ;
+            isLigthOn = true;
           },
           function(){
             switchingOn = false;
           });
       }
     }else{
-      if(isLigthOn) {
+      console.log("off..." + isLigthOn
+        + "- "+ switchingOn);
+      if(isLigthOn !== false) {
         bridge.turnLampOff(
           // success
           function(){
             switchingOn = false;
             isLigthOn = false;
-
           },
           // error
           function(){
-
+            switchingOn = false;
+            isLigthOn = true;
           });
       }
     }

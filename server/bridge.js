@@ -44,7 +44,7 @@ function turnLampOn(callback, errorCallback){
 module.exports.turnLampOn = turnLampOn;
 
 function turnLampOff(callback, errorCallback){
-    console.log('Turning lamp on...');
+    console.log('Turning lamp off...');
     PythonShell.run('turn_lamp_off.py', function (err, data) {
       if (err) {
         console.error('Error calling turnLampOff');
