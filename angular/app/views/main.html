@@ -1,0 +1,10 @@
+<div class="jumbotron">
+  <h2>Set your wakeup time!</h2>
+  <p class="alarm" ng-show="!showServerTime">
+    <input type="time" ng-model="datetime" placeholder="HH:mm" required />
+  </p>
+  <p class="servertime" ng-show="showServerTime">
+    {{serverTime | date:'MM/dd/yyyy @ h:mma'}}
+  </p>
+  <p><a class="btn btn-lg btn-success" ng-click="setAlarm()">Set the time!<span class="glyphicon glyphicon-{{status}}"></span></a></p>
+</div>
